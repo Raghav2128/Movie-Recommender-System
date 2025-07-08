@@ -40,7 +40,7 @@ This project is a content-based movie recommendation system built using **Python
 - `similarity.pkl`: Pickled similarity matrix  
 - Source `.csv` files used for data preprocessing  
 
-These files are required to run the app fully. Please contact the author if you need access.
+These files are required to run the app fully. Please contact me for access.
 
 ---
 
