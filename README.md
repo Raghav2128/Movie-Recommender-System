@@ -27,8 +27,8 @@ This project is a content-based movie recommendation system built using **Python
 ├── app.py                          # Streamlit app
 ├── movie-recommender-system.ipynb  # Development notebook
 ├── requirements.txt                # Python dependencies
-├── movies.pkl                      # Movie metadata (❌ Not uploaded due to file size limits)
-├── similarity.pkl                  # Precomputed similarity matrix (❌ Not uploaded due to file size limits)
+├── movies.pkl                      # Movie metadata
+├── similarity.pkl                  # Precomputed similarity matrix
 ```
 
 ---
