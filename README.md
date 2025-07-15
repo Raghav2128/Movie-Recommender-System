@@ -36,9 +36,8 @@ This project is a content-based movie recommendation system built using **Python
 ## ⚠️ Missing Files
 
 > The following files were **too large to upload to GitHub**:
-- `movies.pkl`: Pickled movie metadata  
 - `similarity.pkl`: Pickled similarity matrix  
-- Source `.csv` files used for data preprocessing  
+- `tmdb_5000_credits.csv` file used for data preprocessing  
 
 These files are required to run the app fully. Please contact me for access.
 
