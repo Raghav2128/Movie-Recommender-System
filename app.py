@@ -1,42 +1,31 @@
-import streamlit as st
-import pickle
+import os
 import requests
 
-def fetch_poster(movie_id):
-    response = requests.get('https://api.themoviedb.org/3/movie/{}?api_key=0dcfc720c3b70a3c69deefe90eb9d6c0&language=en-US'.format(movie_id))
-    data = response.json()
-    return "https://image.tmdb.org/t/p/w500/" + data['poster_path']
+def download_file_from_google_drive(file_id, destination):
+    URL = "https://docs.google.com/uc?export=download"
+    session = requests.Session()
+    response = session.get(URL, params={'id': file_id}, stream=True)
+    token = None
+    for key, value in response.cookies.items():
+        if key.startswith('download_warning'):
+            token = value
+    if token:
+        params = {'id': file_id, 'confirm': token}
+        response = session.get(URL, params=params, stream=True)
+    CHUNK_SIZE = 32768
+    with open(destination, "wb") as f:
+        for chunk in response.iter_content(CHUNK_SIZE):
+            if chunk:
+                f.write(chunk)
 
-new_df = pickle.load(open('movies.pkl', 'rb'))
-similarity = pickle.load(open('similarity.pkl', 'rb'))
+# Download similarity.pkl from Google Drive if not present
+if not os.path.exists("similarity.pkl"):
+    print("Downloading similarity.pkl from Google Drive...")
+    download_file_from_google_drive("1mujwvz2QlxdsVzhdqN7GrAJyjUv2K7NR", "similarity.pkl")
+    print("Download complete.")
 
-def recommend(movie):
-    movie_index = new_df[new_df['title'] == movie].index[0]
-    distances = similarity[movie_index]
-    movies_list = sorted(list(enumerate(distances)),reverse=True,key=lambda x:x[1])[1:6]
-
-    recommended_movies = []
-    recommended_movies_posters = []
-    for i in movies_list:
-        movie_id = new_df.iloc[i[0]].movie_id
-
-        recommended_movies.append(new_df.iloc[i[0]].title)
-        recommended_movies_posters.append(fetch_poster(movie_id))
-    return recommended_movies, recommended_movies_posters
-
-movies_list = new_df['title'].values
-
-st.title('Movie Recommender System')
-
-selected_movie_name = st.selectbox(
-'Choose a movie to get recommendations for:',
-movies_list)
-
-if st.button('Recommend'):
-    names, posters = recommend(selected_movie_name)
-
-    cols = st.columns(5)
-    for i in range(5):
-        with cols[i]:
-            st.image(posters[i])
-            st.caption(names[i])
+# Download tmdb_5000_credits.csv from Google Drive if not present
+if not os.path.exists("tmdb_5000_credits.csv"):
+    print("Downloading tmdb_5000_credits.csv from Google Drive...")
+    download_file_from_google_drive("1yn4JI5pU1I7-wEKNMYGUHK8_hvEP-S4t", "tmdb_5000_credits.csv")
+    print("Download complete.") 
